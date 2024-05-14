@@ -1,7 +1,9 @@
 <?php
 
+use App\Events\CoordinateSent;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,6 +28,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/courier', function () {
         return inertia('Courier');
     })->name('courier');
+
+    Route::post('/courier', function (Request $request) {
+        $coordinates = $request->all();
+
+        CoordinateSent::dispatch($coordinates['lat'], $coordinates['lng']);
+    })->name('courier.coords');
 
     Route::get('/admin', function () {
         return inertia('Admin');
